@@ -344,3 +344,15 @@ After successful setup, you can access:
 *   **Profile:** `http://localhost:8000/user/profile` (after login)
 
 ---
+
+<img width="1916" height="895" alt="Screenshot 2026-07-24 181152" src="https://github.com/user-attachments/assets/f27e9999-a123-417a-8a9d-e377c44221bc" />
+<img width="1915" height="905" alt="Screenshot 2026-07-24 181142" src="https://github.com/user-attachments/assets/3d9c66cc-5869-41c1-a129-360b2f6739b5" />
+<img width="1900" height="902" alt="Screenshot 2026-07-24 181228" src="https://github.com/user-attachments/assets/6b82756b-0704-44fa-881a-e4c8aadded7a" />
+<img width="1897" height="901" alt="Screenshot 2026-07-24 181337" src="https://github.com/user-attachments/assets/cca74c34-9861-456f-8646-1e69dfffb367" />
+<img width="1901" height="912" alt="Screenshot 2026-07-24 181356" src="https://github.com/user-attachments/assets/382788db-ab02-41c2-a31f-ed06338720d9" />
+<img width="1902" height="911" alt="Screenshot 2026-07-24 181347" src="https://github.com/user-attachments/assets/bb97bc2c-0c80-4f5e-afab-6e5417941938" />
+
+
+
+
+
