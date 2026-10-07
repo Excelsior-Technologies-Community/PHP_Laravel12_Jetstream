@@ -14,23 +14,79 @@ class SecurityController extends Controller
     {
         $user = $request->user();
 
+        /*
+        |--------------------------------------------------------------------------
+        | Recent Login Activities
+        |--------------------------------------------------------------------------
+        */
+
         $recentActivities = $user->loginActivities()
-            ->latest('login_at')
-            ->take(10)
+            ->oldest('login_at')
+            ->take(5)
             ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Active Sessions
+        |--------------------------------------------------------------------------
+        */
 
         $activeSessions = $user->loginActivities()
             ->whereNull('logout_at')
             ->count();
 
+        /*
+        |--------------------------------------------------------------------------
+        | API Tokens
+        |--------------------------------------------------------------------------
+        */
+
         $apiTokenCount = $user->tokens()->count();
 
+        /*
+        |--------------------------------------------------------------------------
+        | Notifications
+        |--------------------------------------------------------------------------
+        */
+
         $notifications = $user->notifications()
-            ->latest()
-            ->take(10)
+            ->oldest()
+            ->take(5)
             ->get();
 
+        $unreadNotifications = $user->unreadNotifications()->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Passkeys
+        |--------------------------------------------------------------------------
+        */
+
         $hasPasskeys = $this->hasPasskeys($user->id);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Security Score
+        |--------------------------------------------------------------------------
+        */
+
+        $securityScore = 0;
+
+        if ($user->email_verified_at) {
+            $securityScore += 25;
+        }
+
+        if ($user->two_factor_secret) {
+            $securityScore += 25;
+        }
+
+        if ($hasPasskeys) {
+            $securityScore += 25;
+        }
+
+        if ($apiTokenCount === 0) {
+            $securityScore += 25;
+        }
 
         return view('security.index', [
             'user' => $user,
@@ -38,7 +94,9 @@ class SecurityController extends Controller
             'activeSessions' => $activeSessions,
             'apiTokenCount' => $apiTokenCount,
             'notifications' => $notifications,
+            'unreadNotifications' => $unreadNotifications,
             'hasPasskeys' => $hasPasskeys,
+            'securityScore' => $securityScore,
         ]);
     }
 
@@ -61,7 +119,7 @@ class SecurityController extends Controller
     }
 
     /**
-     * Mark a notification as read.
+     * Mark one notification as read.
      */
     public function markNotificationAsRead(
         Request $request,
@@ -74,6 +132,24 @@ class SecurityController extends Controller
             ->first()
             ?->markAsRead();
 
-        return back();
+        return back()->with(
+            'success',
+            'Notification marked as read.'
+        );
+    }
+
+    /**
+     * Mark all notifications as read.
+     */
+    public function markAllNotificationsAsRead(Request $request)
+    {
+        $request->user()
+            ->unreadNotifications
+            ->markAsRead();
+
+        return back()->with(
+            'success',
+            'All notifications marked as read.'
+        );
     }
 }
